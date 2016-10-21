@@ -1,0 +1,176 @@
+Links:
+
+http://null-byte.wonderhowto.com/how-to/sploit-make-python-port-scanner-0161074/
+
+
+A:  http://null-byte.wonderhowto.com/how-to/sploit-make-python-port-scanner-0161074/
+
+  1.  Definitions
+	1)  A port scanner is a software application designed to probe a server or 
+		host for open ports. This is often used by administrators to verify security 
+		policies of their networks and by attackers to identify running services on a 
+		host with the view to compromise it.
+
+	2)  A port scan or portscan can be defined as a process that sends client requests 
+		to a range of server port addresses on a host, with the goal of finding an active 
+		port. While not a nefarious process in and of itself, it is one used by hackers 
+		to probe target machine services with the aim of exploiting a known vulnerability 
+		of that service. However the majority of uses of a port scan are not attacks and 
+		are simple probes to determine services available on a remote machine.
+
+	3)  To portsweep is to scan multiple hosts for a specific listening port. 
+		The latter is typically used to search for a specific service, ( For example, 
+		an SQL-based computer worm may portsweep looking for hosts listening on TCP 
+		port 1433 eg. SQL Slammer).
+		
+  2. TYPES OF SCANNING PROTOCOLS
+	 some types of network scanning protocols.
+
+	1)  TCP Scanning
+		The simplest port scanners use the operating system's network functions and are 
+		generally the next option to go to when SYN is not a feasible option ( described 
+		next ). Nmap calls this mode connect scan, named after the Unix connect() system
+		call. If a port is open, the operating system completes the TCP three-way handshake,
+		and the port scanner immediately closes the connection to avoid performing a 
+		Denial-of-service attack. Otherwise an error code is returned. 
+		This scan mode has the advantage that the user does not require special privileges. 
+		However, using the OS network functions prevents low-level control, so this scan 
+		type is less common. This method is "noisy", particularly if it is a "portsweep": 
+		the services can log the sender IP address and Intrusion detection systems can raise
+		an alarm.
+
+	2)  SYN Scanning
+		SYN scan is another form of TCP scanning. Rather than use the operating system's 
+		network functions, the port scanner generates raw IP packets itself, and monitors 
+		for responses. This scan type is also known as "half-open scanning", because it 
+		never actually opens a full TCP connection. The port scanner generates a SYN packet. 
+		If the target port is open, it will respond with a SYN-ACK packet. The scanner host responds
+		with an RST packet, closing the connection before the handshake is completed. If the port is 
+		closed but unfiltered, the target will instantly respond with a RST packet.
+
+		The use of raw networking has several advantages, giving the scanner full control of
+		the packets sent and the timeout for responses, and allowing detailed reporting of 
+		the responses. There is debate over which scan is less intrusive on the target host. 
+		SYN scan has the advantage that the individual services never actually receive a connection. 
+		However, the RST during the handshake can cause problems for some network stacks, in 
+		particular simple devices like printers. There are no conclusive arguments either way.
+
+	3)  UDP Scanning
+		UDP scanning is also possible, although there are technical challenges. UDP is a 
+		connectionless protocol so there is no equivalent to a TCP SYN packet. However, 
+		if a UDP packet is sent to a port that is not open, the system will respond with 
+		an ICMP port unreachable message. Most UDP port scanners use this scanning method, 
+		and use the absence of a response to infer that a port is open. However, if a port 
+		is blocked by a firewall, this method will falsely report that the port is open. 
+		If the port unreachable message is blocked, all ports will appear open. This method 
+		is also affected by ICMP rate limiting.
+
+		An alternative approach is to send application-specific UDP packets, hoping to generate 
+		an application layer response. For example, sending a DNS query to port 53 will result in 
+		a response, if a DNS server is present. This method is much more reliable at identifying 
+		open ports. However, it is limited to scanning ports for which an application specific 
+		probe packet is available. Some tools (e.g., nmap) generally have probes for less than 20 UDP 
+		services, while some commercial tools (e.g., nessus) have as many as 70. In some cases, a 
+		service may be listening on the port, but configured not to respond to the particular probe packet.
+
+	4)  ACK Scanning
+		ACK scanning is one of the more unusual scan types, as it does not exactly determine whether the port is open 
+		or closed, but whether the port is filtered or unfiltered. This is especially good when attempting to probe 
+		for the existence of a fire wall and its rule sets. Simple packet filtering will allow established connections 
+		(packets with the ACK bit set), whereas a more sophisticated stateful firewall might not.
+
+	5)  Window Scanning
+		Rarely used because of its out dated nature, window scanning is fairly untrustworthy in determining whether a 
+		port is opened or closed. It generates the same packet as an ACK scan, but checks whether the window field of 
+		the packet has been modified. When the packet reaches its destination, a design flaw attempts to create a 
+		window size for the packet if the port is open, flagging the window field of the packet with 1's before it 
+		returns to the sender. Using this scanning technique with systems that no longer support this implementation 
+		returns 0's for the window field, labeling open ports as closed.
+
+	6)  FIN Scanning
+		Since SYN scans are not surreptitious enough, fire walls are, in general, scanning for and blocking packets 
+		in the form of SYN packets.3 FIN packets can bypass fire walls without modification. Closed ports reply to a 
+		FIN packet with the appropriate RST packet, whereas open ports ignore the packet on hand. This is typical 
+		behavior due to the nature of TCP, and is in some ways an inescapable downfall.
+
+  3. Other Scan Types
+	 Some more unusual scan types exist. These have various limitations and are not widely used. 
+	 Nmap supports most of these.
+
+	1)  X-mas and Null Scan - Similar to FIN scanning, but:
+		X-mas sends packets with FIN, URG and PUSH flags turned on like a Christmas tree.
+		Null sends a packet with no TCP flags set.
+
+	2)  Protocol Scan
+		Determines what IP level protocols (TCP, UDP, GRE, etc.) are enabled.
+
+	3)  Proxy Scan
+		A proxy ( SOCKS or HTTP ) is used to perform the scan. The target will see the proxy's IP address as the source. 
+		This can also be done using some FTP servers.
+
+	4)  Idle Scan
+		Another method of scanning without revealing one's IP address, taking advantage of the predictable IP ID flaw.
+
+	5)  Cat Scan
+		Checks ports for erroneous packets.
+
+	6)  ICMP Scan
+		determines if a host responds to ICMP requests, such as echo (ping), netmask, etc.
+		
+		
+  4.  Example:  See simple_port_scanner.py
+  
+  5.  nmap
+ 	rduvalwa2@C1246895-XPS:~$ nmap -sT -O localhost
+	The program 'nmap' is currently not installed.  You can install it by typing:
+	sudo apt-get install nmap
+	rduvalwa2@C1246895-XPS:~$ sudo apt-get install nmap
+	[sudo] password for rduvalwa2: 
+	Reading package lists... Done
+	Building dependency tree       
+	Reading state information... Done
+	The following NEW packages will be installed:
+  	nmap
+	0 upgraded, 1 newly installed, 0 to remove and 37 not upgraded.
+	Need to get 1,643 kB of archives.
+	After this operation, 6,913 kB of additional disk space will be used.
+	Get:1 http://us.archive.ubuntu.com/ubuntu/ precise/main nmap amd64 5.21-1.1ubuntu1 [1,643 kB]
+	Fetched 1,643 kB in 1s (1,525 kB/s)
+	Selecting previously unselected package nmap.
+	(Reading database ... 185276 files and directories currently installed.)
+	Unpacking nmap (from .../nmap_5.21-1.1ubuntu1_amd64.deb) ...
+	Processing triggers for man-db ...
+	Setting up nmap (5.21-1.1ubuntu1) ...
+	rduvalwa2@C1246895-XPS:~$ nmap -sT -O localhost
+	TCP/IP fingerprinting (for OS scan) requires root privileges.
+	QUITTING!
+	rduvalwa2@C1246895-XPS:~$ sudo nmap -sT -O localhost
+
+	Starting Nmap 5.21 ( http://nmap.org ) at 2016-05-24 20:16 PDT
+	Nmap scan report for localhost (127.0.0.1)
+	Host is up (0.000015s latency).
+	Not shown: 996 closed ports
+	PORT     STATE SERVICE
+	22/tcp   open  ssh
+	53/tcp   open  domain
+	631/tcp  open  ipp
+	5900/tcp open  vnc
+	No exact OS matches for host (If you know what OS is running on it, see http://nmap.org/submit/ ).
+	TCP/IP fingerprint:
+	OS:SCAN(V=5.21%D=5/24%OT=22%CT=1%CU=38075%PV=N%DS=0%DC=L%G=Y%TM=5745191C%P=
+	OS:x86_64-unknown-linux-gnu)SEQ(SP=105%GCD=1%ISR=10B%TI=Z%CI=I%II=I%TS=8)OP
+	OS:S(O1=MFFD7ST11NW7%O2=MFFD7ST11NW7%O3=MFFD7NNT11NW7%O4=MFFD7ST11NW7%O5=MF
+	OS:FD7ST11NW7%O6=MFFD7ST11)WIN(W1=AAAA%W2=AAAA%W3=AAAA%W4=AAAA%W5=AAAA%W6=A
+	OS:AAA)ECN(R=Y%DF=Y%T=40%W=AAAA%O=MFFD7NNSNW7%CC=Y%Q=)T1(R=Y%DF=Y%T=40%S=O%
+	OS:A=S+%F=AS%RD=0%Q=)T2(R=N)T3(R=N)T4(R=Y%DF=Y%T=40%W=0%S=A%A=Z%F=R%O=%RD=0
+	OS:%Q=)T5(R=Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)T6(R=Y%DF=Y%T=40%W=0%S
+	OS:=A%A=Z%F=R%O=%RD=0%Q=)T7(R=Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)U1(R
+	OS:=Y%DF=N%T=40%IPL=164%UN=0%RIPL=G%RID=G%RIPCK=G%RUCK=G%RUD=G)IE(R=Y%DFI=N
+	OS:%T=40%CD=S)
+
+	Network Distance: 0 hops
+
+	OS detection performed. Please report any incorrect results at http://nmap.org/submit/ .
+	Nmap done: 1 IP address (1 host up) scanned in 11.92 seconds
+	rduvalwa2@C1246895-XPS:~$ 
+  

@@ -1,0 +1,48 @@
+Repository /Users/rduvalwa2/Workspace/GitRepos/Py_Servers.git
+
+https://www.python.org/dev/peps/pep-0318/
+https://realpython.com/blog/python/primer-on-python-decorators/
+
+Examples
+A)	http://www.learnpython.org/en/Decorators
+	Decorators
+	Decorators allow you to make simple modifications to callable objects like functions, 
+	methods, or classes. We shall deal with functions for this tutorial. 
+	The syntax:
+	@decorator
+	def functions(arg):
+    	return "Return"
+    	
+    A decorator is just function which takes a functions and returns one. 
+    For example you could do this:
+
+	def repeater(old_function):
+    	def new_function(*args, **kwds): 
+    	#See learnpython.org/page/Multiple%20Function%20Arguments for how *args and **kwds works
+        	old_function(*args, **kwds) #we run the old function
+        	old_function(*args, **kwds) #we do it twice
+    	return new_function 
+    	#we have to return the new_function, or it wouldn't reassign it to the value
+    	
+    This would make a function repeat twice.
+	
+	>>> @repeater
+	def Multiply(num1, num2):
+    	print num1*num2
+	>>> Multiply(2, 3)
+	6
+	6
+	
+	Make a decorator factory which returns a decorator that decorates functions with one argument.
+	The factory should take one argument, a type, and then returns a decorator that makes function 
+	should check if the input is the correct type. If it is wrong, it should print "Bad Type". 
+	(In reality, it should raise an error, but error raising isn't in this tutorial.) 
+	Look at the tutorial code and expected output to see what it is if you are confused 
+	(I know I would be.) Using isinstance(object, type_of_object) or type(object) might help.
+	
+B)  https://realpython.com/blog/python/primer-on-python-decorators/
+	Syntactic sugar!
+	Python allows you to simplify the calling of decorators using the @ symbol 
+	(this is called “pie” syntax).
+
+	

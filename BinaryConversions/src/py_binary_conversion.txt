@@ -1,0 +1,39 @@
+Python Binary Conversions
+
+To send data over the TCP/IP network the data has to be converted to binary.
+
+https://docs.python.org/2/library/binascii.html
+https://docs.python.org/3/library/binascii.html
+
+The binascii module contains a number of methods to convert between binary and various ASCII-encoded binary representations. Normally, you will not use these functions directly but use wrapper modules like uu, base64, or binhex instead. The binascii module contains low-level functions written in C for greater speed that are used by the higher-level modules.
+A) binascii module
+	-  methods to convert between binary and various ASCII-encoded binary representations
+	-  Normally not use these functions directly but use wrapper modules like uu, base64, or binhex instead. 
+	-  module contains low-level functions written in C for greater speed that are used by the higher-level modules
+	
+	1) binascii.a2b_uu(string)
+	Convert a single line of uuencoded data back to binary and return the binary data. 
+	Lines normally contain 45 (binary) bytes, except for the last line. Line data may be followed by whitespace.
+
+
+binascii.crc32(data[, crc])
+	Compute CRC-32, the 32-bit checksum of data, starting with an initial crc. 
+	This is consistent with the ZIP file checksum. Since the algorithm is designed for use as a checksum algorithm, 
+	it is not suitable for use as a general hash algorithm. Use as follows:
+
+ Python 2.7.9 (v2.7.9:648dcafa7e5f, Dec 10 2014, 10:10:46) 
+	>>> import binascii
+	>>> print binascii.crc32("hello world")
+	222957957
+
+	
+	
+	
+********** struct **************	
+https://docs.python.org/3/library/struct.html
+7.1. struct — Interpret bytes as packed binary data
+This module performs conversions between Python values and C structs represented as Python bytes objects. This can be used in handling binary data stored in files or from network connections, among other sources. It uses Format Strings as compact descriptions of the layout of the C structs and the intended conversion to/from Python values.
+
+Note By default, the result of packing a given C struct includes pad bytes in order to maintain proper alignment for the C types involved; similarly, alignment is taken into account when unpacking. This behavior is chosen so that the bytes of a packed struct correspond exactly to the layout in memory of the corresponding C struct. To handle platform-independent data formats or omit implicit pad bytes, use standard size and alignment instead of native size and alignment: see Byte Order, Size, and Alignment for details.
+Several struct functions (and methods of Struct) take a buffer argument. This refers to objects that implement the Buffer Protocol and provide either a readable or read-writable buffer. The most common types used for that purpose are bytes and bytearray, but many other types that can be viewed as an array of bytes implement the buffer protocol, so that they can be read/filled without additional copying from a bytes object.
+

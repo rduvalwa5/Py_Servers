@@ -1,0 +1,10 @@
+Notes on proxy servers
+
+Links:
+http://lifehacker.com/5469038/bypass-heavy-handed-web-filters-with-your-own-proxy-server
+http://www.trickseek.net/how-to-create-a-proxy-server/
+http://www.labnol.org/internet/setup-proxy-server/12890/
+
+
+A: Python Proxy Server
+http://digiwonk.wonderhowto.com/how-to/use-operas-new-unlimited-vpn-service-for-free-0170534/
