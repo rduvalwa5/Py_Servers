@@ -88,7 +88,7 @@ if __name__ == '__main__':
     for b in bytes_range(5):
         print(b)
         
-    aB = bytes(bytes_range(5),'ascii')
+    aB = bytes('abcde','ascii')
     for a in aB:
         print(a)
     
