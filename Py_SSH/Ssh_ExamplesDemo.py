@@ -1,4 +1,8 @@
 '''
+http://docs.paramiko.org/en/2.4/api/client.html
+http://docs.paramiko.org/en/2.4/
+Examples
+https://gist.github.com/mlafeldt/841944
 Created on Nov 17, 2017
 https://pypi.python.org/pypi/scp
 https://pypi.python.org/pypi/scp
@@ -39,20 +43,81 @@ Installing collected packages: idna, asn1crypto, pycparser, cffi, six, cryptogra
   Running setup.py install for pycparser ... done
 Successfully installed asn1crypto-0.23.0 bcrypt-3.1.4 cffi-1.11.2 cryptography-2.1.3 idna-2.6 paramiko-2.4.0 pyasn1-0.3.7 pycparser-2.18 pynacl-1.2.0 scp-0.10.2 six-1.11.0
 
+http://docs.paramiko.org/en/2.4/
+http://docs.paramiko.org/en/2.4/api/client.html
+
+Secure key information for Mac OSX
+/etc/ssh/ssh_host_key
+
+OSXAir:ssh rduvalwa2$ ls ~/.ssh
+github_rsa            github_rsa.pub_bak-github    known_hosts
+github_rsa.pub            github_rsa_bak-github
+
+OSXAir:.ssh rduvalwa2$ ls -ltr
+total 56
+-rw-------  1 rduvalwa2  staff  1766 Jun 25  2012 github_rsa_bak-github
+-rw-r--r--  1 rduvalwa2  staff   398 Jun 25  2012 github_rsa.pub_bak-github
+-rw-r--r--  1 rduvalwa2  staff   402 May  3  2015 github_rsa.pub
+-rw-------  1 rduvalwa2  staff  1766 May  3  2015 github_rsa
+-rw-r--r--  1 rduvalwa2  staff  9627 Nov 25 20:20 known_hosts
+OSXAir:.ssh rduvalwa2$ pwd
+/Users/rduvalwa2/.ssh
+
+scp syntax:   
+OSXAir:.ssh rduvalwa2$ scp ./testScpFile.txt rduvalwa2@c1246895-centos:~/testScpFile.txt
+rduvalwa2@c1246895-centos's password: 
+testScpFile.txt                                    100%   22     8.9KB/s   00:00    
+OSXAir:.ssh rduvalwa2$ 
 
 '''
-from paramiko import SSHClient
-from scp import SCPClient
 
-ssh = SSHClient()
-ssh.load_system_host_keys()
-ssh.connect('example.com')
+#!/usr/bin/env python
 
-# SCPCLient takes a paramiko transport as its only argument
-scp = SCPClient(ssh.get_transport())
+import sys, paramiko
+import binascii 
+#if len(sys.argv) < 4:
+#    print "args missing"
+#    sys.exit(1)
 
-scp.put('test.txt', 'test2.txt')
-scp.get('test2.txt')
+#hostname = sys.argv[1]
+#password = sys.argv[2]
+#command = sys.argv[3]
 
-scp.close()
+hostname = 'c1246895-centos'
+password = 'blu4jazz'
+command = 'ls -l *.*'
 
+username = "rduvalwa2"
+port = 22
+
+try:
+    client = paramiko.SSHClient()
+    client.load_system_host_keys()
+    client.set_missing_host_key_policy(paramiko.WarningPolicy)
+    
+    client.connect(hostname, port=port, username=username, password=password)
+
+    stdin, stdout, stderr = client.exec_command(command)
+#    print(stdout.read())
+    lines = []
+    line = []
+    for c in stdout.read():
+#        print(chr(c))
+        if chr(c) != '\n':
+            line.append(chr(c))
+#        print(line)
+        if chr(c) == '\n':
+            lines.append(''.join(line))
+            line = []
+#    print(lines)
+    '''
+    convert array of chars to a string with join and then print
+    '''
+    for l in lines:
+        print(l)
+#        print(''.join(l))
+        
+
+finally:
+    client.close()
+    
