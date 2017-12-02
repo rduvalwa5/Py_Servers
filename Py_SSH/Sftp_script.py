@@ -11,12 +11,12 @@ import sys, paramiko
 #source = sys.argv[3]
 #dest = sys.argv[4]
 
-hostname = 'c1246895-centos'
+hostname = 'ubuntu_osx'
 password = 'blu4jazz'
 username = 'rduvalwa2'
 port = 22
 source = 'test_file.txt'
-dest = 'oscAir_test_file.txt'
+dest = '/home/rduvalwa2/Public/oscAir_test_file.txt'
 
 
 
