@@ -12,12 +12,12 @@ import sys, paramiko
 #source = sys.argv[3]
 #dest = sys.argv[4]
 
-hostname = 'c1246895-centos'
+hostname = 'Ubuntu_Osx'
 password = 'blu4jazz'
 username = 'rduvalwa2'
 port = 22
-source = 'destin_test_file.txt'
-dest = 'centos_destin_test_file.txt'
+source = '/Users/rduvalwa2/Public/oscAir_test_file.txt'
+dest = '/Users/rduvalwa2/Server_Code/Py_Servers/Py_SSH/oscAir_test_file.txt'
 
 
 username = "rduvalwa2"
