@@ -17,5 +17,9 @@ def my_decorator_pie(some_function):
         print("Something is happening after some_function() is called.")
     return wrapper
 
+def my_deco(num):
+    return num + num
+
 if __name__ == "__main__":
-    my_decorator_pie()
+    num = 3
+    print(my_decorator_pie(my_deco(num)))

@@ -22,6 +22,18 @@ if __name__ == "__main__":
 '''
 from Decorator_pie import my_decorator_pie
 
+def my_decorator_pie(some_function):
+    def wrapper():
+        print('In my LOCAL decorator pie!')
+        num = 10
+        if num == 10:
+            print("Modifying the function with a \"Yes!\"")
+        else:
+            print("Modifying the function with a \"No!\"")
+        some_function()
+        print("Something is happening after some_function() is called.")
+    return wrapper
+
 @my_decorator_pie
 def just_some_function():
         print("Some Function Using my_decorator_pie!!!!")
